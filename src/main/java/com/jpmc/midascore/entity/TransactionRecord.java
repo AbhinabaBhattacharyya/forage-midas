@@ -1,54 +1,61 @@
 package com.jpmc.midascore.entity;
 
-import com.jpmc.midascore.entity.UserRecord;
 import jakarta.persistence.*;
 
 @Entity
 public class TransactionRecord {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "sender_id")
+    @JoinColumn(name = "sender_id", nullable = false)
     private UserRecord sender;
 
     @ManyToOne
-    @JoinColumn(name = "recipient_id")
+    @JoinColumn(name = "recipient_id", nullable = false)
     private UserRecord recipient;
 
+    @Column(nullable = false)
     private float amount;
 
-    public TransactionRecord() {}
+    @Column(nullable = false)
+    private float incentive;
 
-    public TransactionRecord(UserRecord sender, UserRecord recipient, float amount) {
+    protected TransactionRecord() {
+    }
+
+    public TransactionRecord(UserRecord sender, UserRecord recipient, float amount, float incentive) {
         this.sender = sender;
         this.recipient = recipient;
         this.amount = amount;
+        this.incentive = incentive;
     }
-    // Getters and Setters
+
+    public Long getId() {
+        return id;
+    }
 
     public UserRecord getSender() {
         return sender;
-    }
-
-    public void setSender(UserRecord sender) {
-        this.sender = sender;
     }
 
     public UserRecord getRecipient() {
         return recipient;
     }
 
-    public void setRecipient(UserRecord recipient) {
-        this.recipient = recipient;
-    }
-
     public float getAmount() {
         return amount;
     }
 
-    public void setAmount(float amount) {
-        this.amount = amount;
+    public float getIncentive() {
+        return incentive;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("TransactionRecord[id=%d, sender=%s, recipient=%s, amount=%f, incentive=%f]",
+                id, sender.getName(), recipient.getName(), amount, incentive);
     }
 }
